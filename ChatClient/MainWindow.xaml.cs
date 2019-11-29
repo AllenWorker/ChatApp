@@ -29,6 +29,7 @@ namespace ChatClient
         public MainWindow()
         {
             InitializeComponent();
+            txtboxUser.Focus();
         }
 
         private void BtnSend_Click(object sender, RoutedEventArgs e)
@@ -36,6 +37,8 @@ namespace ChatClient
             byte[] outStream = System.Text.Encoding.ASCII.GetBytes(txtboxInput.Text + "$");
             serverStream.Write(outStream, 0, outStream.Length);
             serverStream.Flush();
+            txtboxInput.Text = "";
+            txtboxInput.Focus();
         }
 
         private void BtnConnect_Click(object sender, RoutedEventArgs e)
@@ -51,6 +54,11 @@ namespace ChatClient
 
             Thread ctThread = new Thread(getMessage);
             ctThread.Start();
+            txtboxUser.IsEnabled = false;
+            btnConnect.IsEnabled = false;
+            txtboxInput.IsEnabled = true;
+            btnSend.IsEnabled = true;
+            txtboxInput.Focus();
 
 
 
@@ -85,6 +93,7 @@ namespace ChatClient
         private void updateText()
         {
             txtblockMessage.Text = txtblockMessage.Text + Environment.NewLine + " >> " + readData;
+            messageScrollviewer.ScrollToBottom();
         }
     }
 }
